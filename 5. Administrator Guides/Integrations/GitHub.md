@@ -447,19 +447,23 @@ const githubEvents = {
         var output = "["+shortID+"]("+commit.url+")";
       }
     }
-    if (commits.length > 1) {
-      attachment.fields.push({
-        title: changeset,
-        value: output.reverse().join('<br />'),
-        short: is_short
-      });
-    } else {
-      attachment.fields.push({
-        title: changeset,
-        value: output,
-        short: is_short
-      });
-    }
+
+    output.reverse().forEach(function(item, index ){
+        push_this = {};
+        if (index == 0){
+            push_this = {
+                title: changeset,
+                value: item,
+                short: is_short
+            };
+        } else{
+            push_this = {
+                value: item,
+                short: is_short
+            };
+        }
+        attachment.fields.push(push_this);
+    });
 
     const text = ':ballot_box_with_check: Pushed to ' + "["+request.content.ref.split('/').pop()+"]";
 
